@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>My Profile</h2>
+
+<p><strong>Name:</strong> {{ student.name }}</p>
+<p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
+<p><strong>Department:</strong> {{ student.department }}</p>
+<p><strong>Year of Admission:</strong> {{ student.year_of_admission }}</p>
+<p><strong>Phone:</strong> {{ student.phone }}</p>
+<p><strong>Address:</strong> {{ student.address }}</p>
+<p><strong>Date of Birth:</strong> {{ student.date_of_birth }}</p>
+
+<a href="{% url 'edit_student_profile' %}" class="btn btn-primary">Edit Profile</a>
+
+{% endblock %}

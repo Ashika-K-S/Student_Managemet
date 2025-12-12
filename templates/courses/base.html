@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container">
+
+    <a class="navbar-brand" href="{% url 'home' %}">StudentMgmt</a>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+
+        {% if request.user.is_authenticated %}
+
+            {% if request.user.role == "STUDENT" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'courses:course_list' %}">Browse Courses</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'courses:my_courses' %}">My Courses</a>
+                </li>
+            {% endif %}
+
+            {% if request.user.role == "ADMIN" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'courses:course_list' %}">Manage Courses</a>
+                </li>
+            {% endif %}
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>

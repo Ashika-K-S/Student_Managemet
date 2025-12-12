@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow p-4">
+        <h2 class="mb-3">Welcome, {{ student.name }}</h2>
+
+        <p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
+        <p><strong>Department:</strong> {{ student.department }}</p>
+        <p><strong>Phone:</strong> {{ student.phone }}</p>
+
+        <a href="{% url 'student_profile' %}" class="btn btn-primary mt-3">View Full Profile</a>
+
+        <a href="{% url 'courses:course_list' %}" class="btn btn-success mt-3">Browse Courses</a>
+
+        <a href="{% url 'courses:course_list' %}" class="btn btn-info mt-3">Enroll in Courses</a>
+
+        <a href="{% url 'courses:my_courses' %}" class="btn btn-secondary mt-3">My Courses</a>
+
+
+
+    </div>
+</div>
+
+{% endblock %}
