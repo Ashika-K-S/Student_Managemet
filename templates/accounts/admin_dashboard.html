@@ -1,8 +1,164 @@
 {% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
 {% block content %}
-<h1>Admin Dashboard</h1>
-<a href="{% url 'courses:add_student' %}" class="btn btn-primary">Add Student</a>
-<a href="{% url 'courses:admin_student_list' %}" class="btn btn-info">View All Students</a>
-<a href="{% url 'courses:course_list' %}" class="btn btn-primary">Manage Courses</a>
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="fw-bold mb-1">Dashboard</h2>
+    <p class="text-muted mb-0">Overview of system status</p>
+  </div>
+  <div class="text-end">
+    <span class="text-muted small">Welcome,</span>
+    <span class="fw-bold">{{ request.user.username }}</span>
+  </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row mb-4">
+  <div class="col-md-4 mb-3">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body d-flex align-items-center">
+        <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3 text-primary">
+          <i class="fas fa-user-graduate fa-2x"></i>
+        </div>
+        <div>
+          <h6 class="text-muted mb-0">Total Students</h6>
+          <h2 class="fw-bold mb-0">{{ total_students|default:"0" }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 mb-3">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body d-flex align-items-center">
+        <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3 text-success">
+          <i class="fas fa-book-open fa-2x"></i>
+        </div>
+        <div>
+          <h6 class="text-muted mb-0">Total Courses</h6>
+          <h2 class="fw-bold mb-0">{{ total_courses|default:"0" }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 mb-3">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body d-flex align-items-center">
+        <div class="bg-warning bg-opacity-10 p-3 rounded-circle me-3 text-warning">
+          <i class="fas fa-clipboard-check fa-2x"></i>
+        </div>
+        <div>
+          <h6 class="text-muted mb-0">Enrollments</h6>
+          <h2 class="fw-bold mb-0">{{ total_enrollments|default:"0" }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Recent Students -->
+  <div class="col-lg-8 mb-4">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">Recently Registered</h5>
+        <a href="{% url 'students:student_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+              <tr>
+                <th class="ps-4">Student</th>
+                <th>Department</th>
+                <th>Joined</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in recent_students %}
+              <tr>
+                <td class="ps-4">
+                  <div class="d-flex align-items-center">
+                    {% if student.profile_pic %}
+                    <img src="{{ student.profile_pic.url }}" class="rounded-circle me-2" alt="Avatar" width="32"
+                      height="32">
+                    {% else %}
+                    <div
+                      class="rounded-circle bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center me-2"
+                      style="width:32px; height:32px;">
+                      <i class="fas fa-user text-secondary small"></i>
+                    </div>
+                    {% endif %}
+                    <span class="fw-medium">{{ student.user.get_full_name|default:student.user.username }}</span>
+                  </div>
+                </td>
+                <td><span class="badge bg-light text-dark border">{{ student.department }}</span></td>
+                <td class="text-muted small">{{ student.user.date_joined|date:"M d, Y" }}</td>
+                <td><span class="badge bg-success-subtle text-success">Active</span></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center py-4 text-muted">
+                  No students found.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="col-lg-4 mb-4">
+    <h5 class="fw-bold mb-3 ms-1">Quick Actions</h5>
+    <div class="d-grid gap-3">
+      <a href="{% url 'students:student_create' %}" class="card card-hover shadow-sm border-0 text-decoration-none">
+        <div class="card-body d-flex align-items-center">
+          <div class="bg-primary text-white rounded p-2 me-3">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-0 text-dark">Add New Student</h6>
+            <small class="text-muted">Register a new student</small>
+          </div>
+          <i class="fas fa-chevron-right ms-auto text-muted"></i>
+        </div>
+      </a>
+
+      <a href="{% url 'courses:course_create' %}" class="card card-hover shadow-sm border-0 text-decoration-none">
+        <div class="card-body d-flex align-items-center">
+          <div class="bg-success text-white rounded p-2 me-3">
+            <i class="fas fa-book-medical"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-0 text-dark">Add New Course</h6>
+            <small class="text-muted">Create a new course</small>
+          </div>
+          <i class="fas fa-chevron-right ms-auto text-muted"></i>
+        </div>
+      </a>
+
+      <a href="{% url 'admin:index' %}" class="card card-hover shadow-sm border-0 text-decoration-none">
+        <div class="card-body d-flex align-items-center">
+          <div class="bg-dark text-white rounded p-2 me-3">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-0 text-dark">Django Admin</h6>
+            <small class="text-muted">Advanced settings</small>
+          </div>
+          <i class="fas fa-chevron-right ms-auto text-muted"></i>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

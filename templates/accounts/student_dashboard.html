@@ -1,25 +1,63 @@
 {% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
 {% block content %}
 
-<div class="container mt-4">
-    <div class="card shadow p-4">
-        <h2 class="mb-3">Welcome, {{ student.name }}</h2>
+<!-- Header -->
+<div class="mb-4">
+  <h2 class="fw-bold mb-1">
+    Welcome, {{ request.user.username }}
+  </h2>
+  <p class="text-muted">
+    Manage your profile and track your courses
+  </p>
+</div>
 
-        <p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
-        <p><strong>Department:</strong> {{ student.department }}</p>
-        <p><strong>Phone:</strong> {{ student.phone }}</p>
+<!-- Main Cards -->
+<div class="row g-4">
 
-        <a href="{% url 'student_profile' %}" class="btn btn-primary mt-3">View Full Profile</a>
+  <!-- Profile Card -->
+  <div class="col-md-6">
+    <div class="card h-100 p-4 shadow-sm card-hover border-0">
+      <div class="mb-3">
+        <h4 class="fw-bold mb-1">Your Profile</h4>
+        <p class="text-muted mb-0">
+          View or update your personal information.
+        </p>
+      </div>
 
-        <a href="{% url 'courses:course_list' %}" class="btn btn-success mt-3">Browse Courses</a>
-
-        <a href="{% url 'courses:course_list' %}" class="btn btn-info mt-3">Enroll in Courses</a>
-
-        <a href="{% url 'courses:my_courses' %}" class="btn btn-secondary mt-3">My Courses</a>
-
-
-
+      <div class="mt-auto">
+        <a href="{% url 'students:student_profile' %}"
+           class="btn btn-outline-primary w-100">
+          View Profile →
+        </a>
+      </div>
     </div>
+  </div>
+
+  <!-- Courses Card -->
+  <div class="col-md-6">
+    <div class="card h-100 p-4 shadow-sm card-hover border-0">
+      <div class="mb-3">
+        <h4 class="fw-bold mb-1">Courses</h4>
+        <p class="text-muted mb-0">
+          Browse new courses or continue learning.
+        </p>
+      </div>
+
+      <div class="d-grid gap-2 mt-auto">
+        <a href="{% url 'courses:course_list' %}"
+           class="btn btn-primary">
+          Browse Courses →
+        </a>
+        <a href="{% url 'courses:my_courses' %}"
+           class="btn btn-outline-secondary">
+          My Courses
+        </a>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 {% endblock %}

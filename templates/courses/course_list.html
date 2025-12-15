@@ -1,45 +1,38 @@
-{% extends "courses/base.html" %}
-{% block title %}All Courses{% endblock %}
+{% extends "base.html" %}
+{% block title %}Courses{% endblock %}
 
 {% block content %}
-<h2 class="mb-3">All Courses</h2>
+<h2 class="fw-bold mb-3">Courses</h2>
 
-<a href="{% url 'courses:add_course' %}" class="btn btn-primary mb-3">Add New Course</a>
+{% if user.is_admin %}
+  <a href="{% url 'courses:course_create' %}" class="btn btn-success mb-3">Create Course</a>
+{% endif %}
 
-<table class="table table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>Course Name</th>
-            <th>Code</th>
-            <th>Credits</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+<table class="table table-bordered bg-white shadow-sm">
+  <thead class="table-dark">
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
 
-    <tbody>
-        {% for course in courses %}
-        <tr>
-            <td>
-
-    {% if request.user.role == "ADMIN" %}
-        <a href="{% url 'courses:edit_course' course.id %}" class="btn btn-warning btn-sm">Edit</a>
-        <a href="{% url 'courses:delete_course' course.id %}" 
-           class="btn btn-danger btn-sm"
-           onclick="return confirm('Delete this course?')">Delete</a>
-    {% endif %}
-
-    {% if request.user.role == "STUDENT" %}
-        <a href="{% url 'courses:enroll_course' course.id %}" class="btn btn-success btn-sm">Enroll</a>
-    {% endif %}
-
-</td>
-
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4" class="text-center">No courses available.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+  <tbody>
+    {% for c in courses %}
+      <tr>
+        <td>{{ c.title }}</td>
+        <td>{{ c.description|truncatewords:15 }}</td>
+        <td>
+          {% if user.is_admin %}
+            <a href="{% url 'courses:course_edit' c.id %}" class="btn btn-warning btn-sm">Edit</a>
+            <a href="{% url 'courses:course_delete' c.id %}" class="btn btn-danger btn-sm">Delete</a>
+          {% else %}
+            <a href="{% url 'courses:enroll_in_course' c.id %}" class="btn btn-success btn-sm">Enroll</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
 </table>
+
 {% endblock %}

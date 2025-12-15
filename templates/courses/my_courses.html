@@ -1,26 +1,42 @@
 {% extends "base.html" %}
+{% block title %}My Courses{% endblock %}
 
 {% block content %}
-<h2 class="mb-3">My Courses</h2>
+<h2 class="fw-bold mb-3">My Courses</h2>
 
-<table class="table table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>Course</th>
-            <th>Enrolled On</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for e in enrollments %}
-        <tr>
-            <td>{{ e.course.name }}</td>
-            <td>{{ e.enrolled_on|date:"Y-m-d H:i" }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="2" class="text-center">You have not enrolled in any course.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<table class="table table-bordered bg-white shadow-sm">
+  <thead class="table-dark">
+    <tr>
+      <th>Course</th>
+      <th>Enrolled On</th>
+      <th>Progress</th>
+      <th>Status</th>
+      <th>Toggle</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for e in enrollments %}
+      <tr>
+        <td>{{ e.course.title }}</td>
+        <td>{{ e.enrolled_on|date:"Y-m-d" }}</td>
+        <td>{{ e.progress_percent }}%</td>
+        <td>
+          {% if e.completed %}
+            <span class="badge bg-success">Completed</span>
+          {% else %}
+            <span class="badge bg-warning">In Progress</span>
+          {% endif %}
+        </td>
+
+        <td>
+          <a href="{% url 'courses:toggle_complete' e.id %}" class="btn btn-secondary btn-sm">
+            Toggle
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
 </table>
+
 {% endblock %}
